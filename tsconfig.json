@@ -119,5 +119,6 @@
         "resources/js/**/*.d.ts",
         "resources/js/**/*.tsx",
         "resources/js/**/*.jsx",
+        "resources/js/types/**/*.d.ts" // Explicitly include .d.ts files in your types dir
     ]
 }

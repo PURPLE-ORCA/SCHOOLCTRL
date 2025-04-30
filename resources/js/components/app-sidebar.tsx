@@ -4,27 +4,37 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Folder, Layers, LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('dashboard'), 
         icon: LayoutGrid,
+    },
+    {
+        title: 'Études',
+        href: route('etudes.index'), 
+        icon: BookOpen,
+    },
+    {
+        title: 'Niveaux',
+        href: route('niveaux.index'), 
+        icon: Layers,
+    },
+    {
+        title: 'Élèves',
+        href: route('eleves.index'), 
+        icon: Users,
     },
 ];
 
 const footerNavItems: NavItem[] = [
     {
         title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
+        href: 'https://github.com/PURPLE-ORCA/SCHOOLCTRL.git',
         icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
     },
 ];
 
@@ -35,7 +45,9 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href={route('dashboard')} prefetch>
+                                {' '}
+                                {/* Use Ziggy route helper */}
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
