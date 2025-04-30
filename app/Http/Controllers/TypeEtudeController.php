@@ -3,64 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\Models\TypeEtude;
-use App\Http\Requests\StoreTypeEtudeRequest;
-use App\Http\Requests\UpdateTypeEtudeRequest;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
+
 
 class TypeEtudeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Inertia::render('Etudes/Index', [
+            'etudes' => TypeEtude::paginate(10)->withQueryString(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return Inertia::render('Etudes/Form', [
+            'etude' => null,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreTypeEtudeRequest $request)
+    public function store(Request $request) 
     {
-        //
+        $validated = $request->validate([
+            'libelle_etude' => 'required|string|max:255|unique:type_etudes,libelle_etude',
+        ]);
+
+        TypeEtude::create($validated);
+
+        return Redirect::route('etudes.index')->with('success', 'Type d\'étude créé.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TypeEtude $typeEtude)
+
+    public function edit(TypeEtude $etude)
     {
-        //
+        return Inertia::render('Etudes/Form', [
+            'etude' => $etude,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TypeEtude $typeEtude)
+    public function update(Request $request, TypeEtude $etude) 
     {
-        //
+         $validated = $request->validate([
+             'libelle_etude' => 'required|string|max:255|unique:type_etudes,libelle_etude,' . $etude->id_etudes.',id_etudes', 
+         ]);
+
+        $etude->update($validated);
+
+        return Redirect::route('etudes.index')->with('success', 'Type d\'étude mis à jour.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTypeEtudeRequest $request, TypeEtude $typeEtude)
+    public function destroy(TypeEtude $etude)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TypeEtude $typeEtude)
-    {
-        //
+        $etude->delete();
+        return Redirect::route('etudes.index')->with('success', 'Type d\'étude supprimé.');
     }
 }

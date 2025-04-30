@@ -3,64 +3,70 @@
 namespace App\Http\Controllers;
 
 use App\Models\NiveauScolaire;
-use App\Http\Requests\StoreNiveauScolaireRequest;
-use App\Http\Requests\UpdateNiveauScolaireRequest;
+use App\Models\TypeEtude;
+use Illuminate\Http\Request; // Use FormRequest later
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
 
 class NiveauScolaireController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Inertia::render('Niveaux/Index', [
+            'niveaux' => NiveauScolaire::with('typeEtude')->paginate(10)->withQueryString(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return Inertia::render('Niveaux/Form', [
+            'etudes' => TypeEtude::all(['id_etudes', 'libelle_etude']), 
+            'niveau' => null,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreNiveauScolaireRequest $request)
+    public function store(Request $request) 
     {
-        //
+        $validated = $request->validate([
+            'libelle_niveau' => 'required|string|max:255|unique:niveau_scolaires,libelle_niveau',
+            'id_etudes' => 'required|exists:type_etudes,id_etudes',
+        ]);
+
+        NiveauScolaire::create($validated);
+
+        return Redirect::route('niveaux.index')->with('success', 'Niveau créé.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(NiveauScolaire $niveauScolaire)
+    public function edit(NiveauScolaire $niveaux) 
     {
-        //
+         $niveau = $niveaux;
+         $niveau->load('typeEtude');
+
+        return Inertia::render('Niveaux/Form', [
+            'niveau' => $niveau,
+            'etudes' => TypeEtude::all(['id_etudes', 'libelle_etude']),
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(NiveauScolaire $niveauScolaire)
+
+    public function update(Request $request, NiveauScolaire $niveaux) 
     {
-        //
+        $niveau = $niveaux;
+        $validated = $request->validate([
+            'libelle_niveau' => 'required|string|max:255|unique:niveau_scolaires,libelle_niveau,' . $niveau->id_niveau.',id_niveau', // Check unique rule
+            'id_etudes' => 'required|exists:type_etudes,id_etudes',
+        ]);
+
+
+        $niveau->update($validated);
+
+        return Redirect::route('niveaux.index')->with('success', 'Niveau mis à jour.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateNiveauScolaireRequest $request, NiveauScolaire $niveauScolaire)
+    public function destroy(NiveauScolaire $niveaux)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(NiveauScolaire $niveauScolaire)
-    {
-        //
+        $niveau = $niveaux;
+        $niveau->delete();
+        return Redirect::route('niveaux.index')->with('success', 'Niveau supprimé.');
     }
 }
