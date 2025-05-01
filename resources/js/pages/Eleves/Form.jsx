@@ -321,7 +321,7 @@ export default function Form({ eleve, niveaux }) {
                         </Link>
                         <button
                             type="submit"
-                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm disabled:opacity-50 dark:bg-indigo-600"
+                            className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm disabled:opacity-50 dark:bg-indigo-600"
                             disabled={processing}
                         >
                             {processing ? 'Enregistrement...' : isEdit ? 'Mettre à Jour' : 'Enregistrer'}

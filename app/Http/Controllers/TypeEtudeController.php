@@ -10,12 +10,16 @@ use Illuminate\Support\Facades\Redirect;
 
 class TypeEtudeController extends Controller
 {
-    public function index()
+  public function index(Request $request) // Inject Request
     {
+        $perPage = $request->input('per_page', 10); // Default to 10 or choose another default
+
         return Inertia::render('Etudes/Index', [
-            'etudes' => TypeEtude::paginate(10)->withQueryString(),
+            'etudes' => TypeEtude::paginate($perPage)->withQueryString(),
+             // 'filters' => $request->only(['per_page']), // Optional: pass back filters
         ]);
     }
+    // --- End Add Request and Paginate ---
 
     public function create()
     {
@@ -24,11 +28,11 @@ class TypeEtudeController extends Controller
         ]);
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
-        $validated = $request->validate([
-            'libelle_etude' => 'required|string|max:255|unique:type_etudes,libelle_etude',
-        ]);
+         $validated = $request->validate([
+             'libelle_etude' => 'required|string|max:255|unique:type_etudes,libelle_etude',
+         ]);
 
         TypeEtude::create($validated);
 
@@ -43,10 +47,10 @@ class TypeEtudeController extends Controller
         ]);
     }
 
-    public function update(Request $request, TypeEtude $etude) 
+    public function update(Request $request, TypeEtude $etude)
     {
          $validated = $request->validate([
-             'libelle_etude' => 'required|string|max:255|unique:type_etudes,libelle_etude,' . $etude->id_etudes.',id_etudes', 
+             'libelle_etude' => 'required|string|max:255|unique:type_etudes,libelle_etude,' . $etude->id_etudes.',id_etudes',
          ]);
 
         $etude->update($validated);

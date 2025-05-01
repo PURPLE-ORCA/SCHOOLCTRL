@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Redirect;
 
 class EleveController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request) 
     {
-        $eleves = Eleve::with('niveauScolaire.typeEtude') 
-            ->paginate(15) 
+        $perPage = $request->input('per_page', 15); 
+
+        $eleves = Eleve::with('niveauScolaire.typeEtude')
+            ->paginate($perPage) 
             ->withQueryString(); 
-        // dd($eleves)->items(); // Debugging line to check the items in the collection
+
         return Inertia::render('Eleves/Index', [
             'eleves' => $eleves,
         ]);
