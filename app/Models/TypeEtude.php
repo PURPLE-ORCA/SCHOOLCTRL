@@ -16,7 +16,7 @@ class TypeEtude extends Model
         'libelle_etude',
     ];
 
-    public function niveauScolaires(): HasMany
+   public function niveauScolaires(): HasMany
     {
         return $this->hasMany(NiveauScolaire::class, 'id_etudes', 'id_etudes');
     }

@@ -14,9 +14,6 @@ class EleveSeeder extends Seeder
      */
     public function run(): void
     {
-         $niveau_2bac_svt = NiveauScolaire::where('libelle_niveau', '2ème Bac SVT')->firstOrFail()->id_niveau;
-        $niveau_2bac_pc = NiveauScolaire::where('libelle_niveau', '2ème Bac PC')->firstOrFail()->id_niveau;
-        $niveau_1bac_sci = NiveauScolaire::where('libelle_niveau', '1ère Bac Sci Exp')->firstOrFail()->id_niveau;
 
         Eleve::create([
             'num_inscription' => 'INS-001',
@@ -29,7 +26,7 @@ class EleveSeeder extends Seeder
             'code_massar' => 'K123456789',
             'CIN' => 'BK123456',
             'observation' => 'Excellent élément.',
-            'id_niveau' => $niveau_2bac_pc, // Assign to 2Bac PC
+            'id_niveau' => 1, // Assign to 2Bac PC
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -45,7 +42,7 @@ class EleveSeeder extends Seeder
             'code_massar' => 'L987654321',
             'CIN' => null, // No CIN maybe
             'observation' => null,
-            'id_niveau' => $niveau_1bac_sci, // Assign to 1Bac Sci
+            'id_niveau' => 2, // Assign to 1Bac Sci
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -61,7 +58,7 @@ class EleveSeeder extends Seeder
             'code_massar' => 'M112233445',
             'CIN' => 'BJ987654',
             'observation' => 'Needs improvement in Physics.',
-            'id_niveau' => $niveau_2bac_svt, // Assign to 2Bac SVT
+            'id_niveau' => 1, // Assign to 2Bac SVT
             'created_at' => now(),
             'updated_at' => now(),
         ]);

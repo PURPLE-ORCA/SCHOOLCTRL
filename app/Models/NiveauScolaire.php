@@ -20,10 +20,9 @@ class NiveauScolaire extends Model
 
     public function typeEtude(): BelongsTo
     {
-        return $this->belongsTo(TypeEtude::class, 'id_etudes', 'id_etudes');
+        return $this->belongsTo(TypeEtude::class, 'id_etudes');
     }
 
-    // Relationship to Eleve
     public function eleves(): HasMany
     {
         return $this->hasMany(Eleve::class, 'id_niveau', 'id_niveau');

@@ -15,6 +15,7 @@ class EleveController extends Controller
         $eleves = Eleve::with('niveauScolaire.typeEtude') 
             ->paginate(15) 
             ->withQueryString(); 
+        // dd($eleves)->items(); // Debugging line to check the items in the collection
         return Inertia::render('Eleves/Index', [
             'eleves' => $eleves,
         ]);
@@ -23,7 +24,7 @@ class EleveController extends Controller
     public function create()
     {
         return Inertia::render('Eleves/Form', [
-            'niveaux' => NiveauScolaire::with('typeEtude')->get()->map(fn($niveau) => [ // Pass levels for dropdown
+            'niveaux' => NiveauScolaire::with('typeEtude')->get()->map(fn($niveau) => [ 
                 'id' => $niveau->id_niveau,
                 'label' => $niveau->libelle_niveau . ' (' . ($niveau->typeEtude->libelle_etude ?? 'N/A') . ')',
             ]),
@@ -40,7 +41,7 @@ class EleveController extends Controller
             'prenomFr' => 'required|string|max:255',
             'date_naissance' => 'required|date',
             'lieu_naissance' => 'required|string|max:255',
-            'code_massar' => 'required|string|unique:eleves,code_massar|regex:/^[A-Z][0-9]{9}$/i',
+            'code_massar' => 'required|string|unique:eleves,code_massar',
             'id_niveau' => 'required|exists:niveau_scolaires,id_niveau',
             'num_inscription' => 'nullable|string|max:255|unique:eleves,num_inscription',
             'annee_archive' => 'nullable|string|max:4',
@@ -77,12 +78,12 @@ class EleveController extends Controller
             'prenomFr' => 'required|string|max:255',
             'date_naissance' => 'required|date',
             'lieu_naissance' => 'required|string|max:255',
-            'code_massar' => 'required|string|unique:eleves,code_massar,' . $elefe->id . '|regex:/^[A-Z][0-9]{9}$/i',
+            'code_massar' => 'required|string|unique:eleves,code_massar,' . $elefe->id,
             'id_niveau' => 'required|exists:niveau_scolaires,id_niveau',
-             'num_inscription' => 'nullable|string|max:255|unique:eleves,num_inscription,' . $elefe->id,
+            'num_inscription' => 'nullable|string|max:255|unique:eleves,num_inscription,' . $elefe->id,
             'annee_archive' => 'nullable|string|max:4',
             'date_quitter_etablissement' => 'nullable|date',
-             'CIN' => 'nullable|string|max:255|unique:eleves,CIN,' . $elefe->id,
+            'CIN' => 'nullable|string|max:255|unique:eleves,CIN,' . $elefe->id,
             'observation' => 'nullable|string',
         ]);
 

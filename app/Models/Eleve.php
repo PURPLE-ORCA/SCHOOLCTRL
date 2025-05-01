@@ -33,6 +33,6 @@ class Eleve extends Model
 
     public function niveauScolaire(): BelongsTo
     {
-        return $this->belongsTo(NiveauScolaire::class, 'id_niveau', 'id_niveau');
+        return $this->belongsTo(NiveauScolaire::class, 'id_niveau');
     }
 }
